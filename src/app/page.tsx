@@ -1,65 +1,77 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import NavBar from "@/components/navBar";
+
+import Account from "@/components/account";
+import Clamable from "@/components/clamable";
+import ContributionHistory from "@/components/constributionHistory";
+import DistributeTrack from "@/components/distributeTrack";
+import Inverstment from "@/components/inverstment";
+import Notification from "@/components/notification";
+import Payout from "@/components/payOut";
+import PayoutPreference from "@/components/preference";
+import SavingTarget from "@/components/saving";
+import QrGenerator from "@/components/scan";
+import UpcommingPayment from "@/components/upcommingPayment";
 
 export default function Home() {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Array grouping components with custom searchable keywords mapping
+  const dashboardItems = [
+    { id: "notification", component: <Notification />, keywords: ["notification", "alerts", "messages", "notice"] },
+    { id: "upcoming", component: <UpcommingPayment />, keywords: ["upcoming", "payment", "due", "bills", "invoice"] },
+    { id: "preference", component: <PayoutPreference />, keywords: ["preference", "payout", "settings", "config", "options"] },
+    { id: "account", component: <Account />, keywords: ["account", "profile", "user", "balance", "wallet"] },
+    { id: "investment", component: <Inverstment />, keywords: ["investment", "stocks", "portfolio", "growth", "shares"] },
+    { id: "saving", component: <SavingTarget />, keywords: ["saving", "target", "goal", "budget", "vault"] },
+    { id: "payout", component: <Payout />, keywords: ["payout", "withdraw", "transfer", "cash", "bank"] },
+    { id: "history", component: <ContributionHistory />, keywords: ["contribution", "history", "transactions", "past", "logs"] },
+    { id: "track", component: <DistributeTrack />, keywords: ["distribute", "track", "delivery", "status", "shipment"] },
+    { id: "qr", component: <QrGenerator />, keywords: ["qr", "generator", "scan", "code", "barcode"] },
+    { id: "claimable", component: <Clamable />, keywords: ["claimable", "rewards", "bonus", "free", "vouchers"] },
+  ];
+
+  // Dynamic filter processing block running on client updates
+  const filteredItems = dashboardItems.filter((item) => {
+    const cleanQuery = searchQuery.toLowerCase().trim();
+    if (!cleanQuery) return true; 
+
+    return (
+      item.id.toLowerCase().includes(cleanQuery) ||
+      item.keywords.some((word) => word.toLowerCase().includes(cleanQuery))
+    );
+  });
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <>
+      {/* Shared state parameters injection link */}
+      <NavBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+
+      {/* Dynamic Masonry column configuration layer handling structural item variations */}
+      <main className=" p-6 max-w-7xl mx-auto">
+        {filteredItems.length > 0 ? (
+          <section className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6 [column-fill:_balance]">
+            {filteredItems.map((item) => (
+              <div key={item.id} className="break-inside-avoid mb-10 transition-all duration-300">
+                {item.component}
+              </div>
+            ))}
+          </section>
+        ) : (
+          /* Missing content element notification fallback alert */
+          <div className="text-center py-20 bg-gray-50 rounded-2xl border border-dashed border-gray-200 max-w-md mx-auto">
+            <p className="text-gray-500 font-medium text-sm">No cards match {searchQuery}</p>
+            <button
+              onClick={() => setSearchQuery("")}
+              className="mt-3 text-xs bg-black text-white px-3 py-1.5 rounded-md hover:bg-gray-800 transition-colors font-semibold"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+              Reset Search Filter
+            </button>
+          </div>
+        )}
       </main>
-    </div>
+    </>
   );
 }
