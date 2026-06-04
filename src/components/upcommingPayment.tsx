@@ -110,7 +110,7 @@ export default function UpcommingPayment() {
 
     return (
         <>
-            <section className="w-92 rounded-md pt-6 border border-slate-900/30 ">
+            <section className="w-92 rounded-md pt-6 border border-slate-900/30git branch -M main ">
                 <div className="w-92 rounded-md px-5">
 
                     <h2 className="text-md font-semibold mb-2">Upcoming Payments</h2>
