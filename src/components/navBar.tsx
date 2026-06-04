@@ -6,7 +6,7 @@ import { FaGithub } from "react-icons/fa"
 import { navLinks } from "./allData"
 import { NavBarProps } from "./types"
 
-const NavBar = ({ searchQuery, setSearchQuery }: NavBarProps) => {
+const NavBar = ({ searchQuery = "", setSearchQuery }: NavBarProps) => {
     const [check, setCheck] = useState(false);
     
     const open = () => {
@@ -48,13 +48,13 @@ const NavBar = ({ searchQuery, setSearchQuery }: NavBarProps) => {
             <div className="flex items-center gap-3">
                 {/* Search Bar matching query patterns dynamically */}
                 <div className='border-r border-gray-900/50 my-2 h-5 hidden sm:flex flex-col items-center justify-center pr-6'>
-                    <input 
+                    <input
                         className="px-4 py-1.5 rounded-md border border-gray-300 focus:outline-none focus:ring-1 focus:ring-slate-500/20 focus:border-transparent text-black text-sm"
                         placeholder="Search dashboard..."
-                        type="text" 
+                        type="text"
                         value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                    />
+                        onChange={(e) => setSearchQuery?.(e.target.value)}
+                        />
                 </div>
                 <div className="border-r border-gray-900/50 my-2 h-5 flex items-center justify-center pr-6 items-center gap-1 text-sm font-semibold px-3">
                     <FaGithub className='text-lg'/>
